@@ -38,7 +38,8 @@ namespace CraftingSim.Model
         /// <param name="quantity">The new amount to set</param>
         public void AddMaterial(IMaterial material, int quantity)
         {
-            //TODO Implement Me
+            this.material = materials;
+            material.Add(quantity);
         }
 
         /// <summary>
@@ -50,8 +51,12 @@ namespace CraftingSim.Model
         /// <returns>True if removed successfuly, false if not enough material</returns>
         public bool RemoveMaterial(IMaterial material, int quantity)
         {
-            // TODO Implement Me
-            return false;
+            if (material.GetQuantity() >= quantity)
+            {
+                material.Remove(quantity);
+                return true;
+            }
+            else return false;
         }
 
         /// <summary>
@@ -84,7 +89,16 @@ namespace CraftingSim.Model
         /// <param name="file">Path to the materials file</param>
         public void LoadMaterialsFromFile(string file)
         {
-            //TODO Implement Me
+            using (StreamReader sr = new StreamReader(file))
+            {
+                string line;
+                
+                while ((line = sr.ReadLine()) != null)
+                {
+                    string[] matData = line.Split(", ");
+                    materials.Add(new Material(int.Parse(matData[0]), matData[1]), int.Parse(matData[2]));
+                }
+            }
         }
     }
 }

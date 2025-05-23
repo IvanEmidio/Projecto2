@@ -31,7 +31,26 @@ namespace CraftingSim.Model
         /// <param name="recipeFiles">Array of file paths</param>
         public void LoadRecipesFromFile(string[] recipeFiles)
         {
-            //TODO Implement Me
+            
+            foreach (string s in recipeFiles)
+            {
+                
+                using (StreamReader sr = new StreamReader(s))
+                {
+                    string[] data = sr.ReadLine().Split(", ");
+                    Dictionary<IMaterial, int> materials = new Dictionary<IMaterial, int>();
+                    string line;
+                    
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        string[] matData = line.Split(", ");
+                        IMaterial mat = inventory.GetMaterial(int.Parse(matData[0]));
+                        if (mat != null) materials.Add(mat, int.Parse(matData[1]));
+                    }
+                    Recipe newRecipe = new Recipe(data[0], double.Parse(data[1]), materials);
+                    recipeList.Add(newRecipe);
+                }
+            }
         }
 
         /// <summary>
